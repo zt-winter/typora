@@ -12,7 +12,7 @@ layers，也就是tcp/ip协议中各层，主要是链路层、网络层、传�
 
 https://github.com/google/gopacket/blob/v1.1.19/base.go#L19
 
-```
+```go
 type Layer interface {
 	// LayerType is the gopacket type for this layer.
 	LayerType() LayerType
@@ -26,7 +26,7 @@ type Layer interface {
 
 在实际使用时，可以看到下面的列子，**ethernetLayer.(*layers.Ethernet)**，需要对接口类型进行断言和转化。
 
-```
+```go
     ethernetLayer := packet.Layer(layers.LayerTypeEthernet)
     if ethernetLayer != nil {
         fmt.Println("Ethernet layer detected.")
@@ -43,7 +43,7 @@ type Layer interface {
 
 https://github.com/google/gopacket/blob/v1.1.19/layers/base.go 中可以看到BaseLayer的定义
 
-```
+```go
 // BaseLayer is a convenience struct which implements the LayerData and
 // LayerPayload functions of the Layer interface.
 type BaseLayer struct {
@@ -59,6 +59,30 @@ type BaseLayer struct {
 ```
 
 在BaseLayer的基础上，对不同层的不同协议进行
+
+ipv4 layer的定义 https://github.com/google/gopacket/blob/v1.1.19/layers/ip4.go#L43 
+
+```
+type IPv4 struct {
+	BaseLayer
+	Version    uint8
+	IHL        uint8
+	TOS        uint8
+	Length     uint16
+	Id         uint16
+	Flags      IPv4Flag
+	FragOffset uint16
+	TTL        uint8
+	Protocol   IPProtocol
+	   uint16
+	SrcIP      net.IP
+	DstIP      net.IP
+	Options    []IPv4Option
+	Padding    []byte
+}
+```
+
+在Layer接口的实现中还缺少了LayerType()函数，具体实现可以参考下文
 
 https://github.com/google/gopacket/blob/v1.1.19/layers/layertypes.go#L24 
 
@@ -82,29 +106,5 @@ func RegisterLayerType(num int, meta LayerTypeMetadata) LayerType {
 	return OverrideLayerType(num, meta)
 }
 ```
-
-ipv4 layer的定义 https://github.com/google/gopacket/blob/v1.1.19/layers/ip4.go#L43 
-
-```
-type IPv4 struct {
-	BaseLayer
-	Version    uint8
-	IHL        uint8
-	TOS        uint8
-	Length     uint16
-	Id         uint16
-	Flags      IPv4Flag
-	FragOffset uint16
-	TTL        uint8
-	Protocol   IPProtocol
-	Checksum   uint16
-	SrcIP      net.IP
-	DstIP      net.IP
-	Options    []IPv4Option
-	Padding    []byte
-}
-```
-
-
 
 ​	

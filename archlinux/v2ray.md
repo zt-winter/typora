@@ -51,12 +51,17 @@ systemctl restart v2ray.service
 ```
 // linux客户端设置
 {
+  "policy": null,
   "log": {
-    "loglevel": "info"
+    "access": "",
+    "error": "",
+    "loglevel": "warning"
   },
   "inbounds": [
     {
-      "port": 1080,
+      "tag": "proxy",
+      "port": 10808,
+      "listen": "127.0.0.1",
       "protocol": "socks",
       "sniffing": {
         "enabled": true,
@@ -66,74 +71,92 @@ systemctl restart v2ray.service
         ]
       },
       "settings": {
-        "udp": true
-      }
-    },
-    {
-      "port": 8080,
-      "protocol": "http",
-      "sniffing": {
-        "enabled": true,
-        "destOverride": [
-          "http",
-          "tls"
-        ]
-      }
+        "auth": "noauth",
+        "udp": true,
+        "ip": null,
+        "address": null,
+        "clients": null
+      },
+      "streamSettings": null
     }
   ],
   "outbounds": [
     {
-      "tag": "proxy-vmess",
+      "tag": "proxy",
       "protocol": "vmess",
       "settings": {
         "vnext": [
           {
-            "address": "你的服务器ip地址",
-            "port": 你的v2ray端口,
+            "address": "212.50.246.217",
+            "port": 39710,
             "users": [
               {
-                "id": "你的uuid",
-                "alterId": 4
+                "id": "1790040e-33dc-4682-b5f4-fe773283586b",
+                "alterId": 0,
+                "email": "t@t.tt",
+                "security": "auto"
               }
             ]
           }
-        ]
+        ],
+        "servers": null,
+        "response": null
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": null,
+        "tlsSettings": null,
+        "tcpSettings": null,
+        "kcpSettings": null,
+        "wsSettings": null,
+        "httpSettings": null,
+        "quicSettings": null
+      },
+      "mux": {
+        "enabled": true,
+        "concurrency": 8
       }
     },
     {
       "tag": "direct",
-      "settings": {},
-      "protocol": "freedom"
+      "protocol": "freedom",
+      "settings": {
+        "vnext": null,
+        "servers": null,
+        "response": null
+      },
+      "streamSettings": null,
+      "mux": null
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole",
+      "settings": {
+        "vnext": null,
+        "servers": null,
+        "response": {
+          "type": "http"
+        }
+      },
+      "streamSettings": null,
+      "mux": null
     }
   ],
-  "dns": {
-    "server": [
-      "8.8.8.8",
-      "1.1.1.1"
-    ]
-  },
-
+  "stats": null,
+  "api": null,
+  "dns": null,
   "routing": {
     "domainStrategy": "IPOnDemand",
     "rules": [
       {
         "type": "field",
-        "outboundTag": "proxy-vmess"
-      },
-      {
-        "type": "field",
-        "domain": [
-          "geosite:cn"
+        "port": null,
+        "inboundTag": [
+          "api"
         ],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "outboundTag": "direct",
-        "ip": [
-          "geoip:cn",
-          "geoip:private"
-        ]
+        "outboundTag": "api",
+        "ip": null,
+        "domain": null
       }
     ]
   }
