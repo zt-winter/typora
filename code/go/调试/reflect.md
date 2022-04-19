@@ -1,5 +1,6 @@
 获取变量类型的三种方法
 
+```
 package main
 import (
     "fmt"
@@ -17,3 +18,4 @@ func main() {
     // 方法3：
     fmt.Printf(`%T`, num)
 }
+```
