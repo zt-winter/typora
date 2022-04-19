@@ -1,10 +1,16 @@
 # 在使用gopacket时部分学习思考
 
+### layer总体结构
+
+Layer(interface) -> TCP(struct) -> BaseLayer(struct)
+Layer(interface):定义三个方法 LayerType(),LayerContents(),LayerPayload()
+TCP(struct):定义LayerType()
+BaseLayer(struct):定义LayerContents(),LayerPayload()
 
 
 ### 接口的使用，动态类型推断
 
-layers，也就是tcp/ip协议中各层，主要是链路层、网络层、传输层、应用层，在gopacket中具体指向流量数据某一层的协议
+layers，也就是tcp/ip协议中各层，主要是链路层、网络层、传输层、应用层，在gopacket中具体指向流量数据某一层的协议。
 
 
 
