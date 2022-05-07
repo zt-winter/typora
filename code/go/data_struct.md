@@ -109,6 +109,14 @@
   ```
   
   * 使用数组给切片sliceOne初始化时，sliceOne的值与&array的值是一样的，对sliceOne[i]中的值就行修改时，array中对应的值也会修改。但sliceOne的长度发生变化时，sliceOne的地址就会发生变化。相当于在新开的内存区域创建了一个新的C/C++数组。切片也可以互相赋值，如sliceTwo=sliceOne，但要注意，这样0xc00000a510的值就再也没有指针指向它，无法释放，造成了内存使用不安全。
+	```
+	// one是一个一维数组，ans是一个二维数组
+	onecopy := make([]int, len(one))
+	copy(onecopy, one)
+	ans = append(ans, onecopy)
+	//或者
+	ans = append(ans, append([]int{}, path...))
+	```
   
   * 二维切片需要注意的地方
   
